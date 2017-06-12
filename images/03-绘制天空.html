@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+<canvas id="cv"></canvas>
+
+<script>
+  var cv = document.getElementById('cv');
+  cv.width = 800;
+  cv.height = 600;
+  cv.style.border = '1px solid red';
+
+  var context = cv.getContext('2d');
+  var toRadian = function (angle) {
+    return angle / 180 * Math.PI;
+  };
+
+  var imgsArr = ['birds', 'land', 'pipe1', 'pipe2', 'sky'];
+
+  function loadImages(srcList, callback) {
+    var count = 0,
+        allLength = srcList.length,
+        imgsObj = {};
+
+    srcList.forEach(function (srcStr) {
+      var img = new Image();
+      img.src = './images/' + srcStr + '.png';
+      imgsObj[srcStr] = img;
+
+      img.onload = function () {
+        count++;
+        if (count >= allLength) {
+          callback(imgsObj);
+        }
+      };
+    });
+  }
+
+  loadImages(imgsArr, function (imgList) {
+    var birdImg = imgList.birds;
+
+    var imgW = birdImg.width / 3;
+    var imgH = birdImg.height;
+    var frameIndex = 0;
+    var x = 100;
+    var y = 100;
+    var speed = 0;
+    var a = 0.0005;
+    var delta = 0; // 两帧时间间隔
+    var lastFrameTime = new Date();
+    var curFrameTime;
+
+    // 小鸟旋转：
+    var curAngle = 0;
+    var maxAngle = 45;
+    var maxSpeed = 0.3;
+
+    //绘制天空
+
+
+    (function render() {
+      // 保存绘制状态
+      context.save();
+      context.clearRect(0, 0, cv.width, cv.height);
+
+      curFrameTime = new Date();
+      delta = curFrameTime - lastFrameTime;
+      lastFrameTime = curFrameTime;
+
+
+      //------绘制天空 开始---------
+
+
+
+      //------绘制天空 结束---------
+
+
+
+
+      // 计算小鸟经过时间 delta 之后的位置：
+      speed = speed + a * delta;
+      y += speed * delta + 1 / 2 * a * Math.pow(delta, 2);
+
+      // 计算角度：
+      curAngle = speed / maxSpeed * maxAngle;
+      // 处理角度超过最大角度的问题：
+      if (curAngle > maxAngle) {
+        curAngle = maxAngle;
+      } else if (curAngle < -maxAngle) {
+        curAngle = -maxAngle;
+      }
+
+      // 先平移，再旋转
+      context.translate(x, y);
+      context.rotate(toRadian(curAngle));
+
+      context.drawImage(birdImg, imgW * frameIndex++, 0, imgW, imgH, -1 / 2 * imgW, -1 / 2 * imgH, imgW, imgH);
+
+      frameIndex %= 3;
+
+      // 恢复状态
+      context.restore();
+
+      requestAnimationFrame(render);
+    })();
+
+    cv.addEventListener('click', function () {
+      speed = -0.3;
+    });
+
+  });
+</script>
+</body>
+
+</html>

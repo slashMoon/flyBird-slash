@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>小鸟封装</title>
+
+</head>
+<body>
+<div id = 'cv'></div>
+<!--引入全局对象Fly-->
+<script src='js/fly.js'></script>
+<!--引入bird对象-->
+<script src='js/bird.js'></script>
+<!--引入天空sky对象-->
+<script src='js/sky.js'></script>
+<!--引入管道Piep对象-->
+<script src='js/pipe.js'></script>
+<!--引入陆地land对象-->
+<script src='js/land.js'></script>
+<!--引入游戏对象-->
+<script src = 'js/game.js'></script>
+<script>
+//  var cv = document.getElementById("cv");
+//  cv.width = 800;
+//  cv.height = 600;
+//  cv.style.border = '1px solid #ccc';
+//  var context = cv.getContext('2d');
+
+
+ var game = new Fly.Game({
+   id:cv
+ });
+  game.startGame();
+
+
+</script>
+</body>
+</html>
